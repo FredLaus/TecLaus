@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecLaus - O Jogo de Matemática Definitivo</title>
+    <!-- Vincula o arquivo de estilo CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="verao">
+
+    <!-- EFEITO DE CLIMA DINÂMICO -->
+    <div id="clima" class="efeito-clima"></div>
+
+    <!-- HUD CENTRAL DE STATUS -->
+    <div class="hud">
+        <div>🎮 Nível: <span id="hud-level">1</span>/1000 <span id="hud-nmd" class="oculto" style="color:#e74c3c; font-weight:bold;">[NMD]</span></div>
+        <div>📜 Nota: <span id="hud-nota">A1</span></div>
+        <div>🔥 Ofensiva: <span id="hud-ofensiva">0</span> dias</div>
+        <div>🪙 LENES: <span id="hud-lenes">50</span></div>
+        <div>❤️ Vidas: <span id="hud-vidas">5</span>/5</div>
+        <div id="tag-aep" class="oculto" style="background:#d4af37; color:#2c3e50; padding:2px 8px; border-radius:4px; font-size:12px;">🌟 AEP</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- TELA SPLASH COM LOGO OFICIAL DO PROJETO -->
+        <div id="tela-splash" class="splash-screen">
+            <div class="logo-simulada">
+                TECLAUS
+                <div class="logo-subtitle">DESAFIO DAS ESTAÇÕES</div>
+            </div>
+            <h2>O Jogo de Matemática Definitivo</h2>
+            <p>Carregando ecossistema de aprendizagem inteligente...</p>
+            <button class="btn-acao" onclick="iniciarJogo()">ENTRAR NO JOGO</button>
+            
+            <!-- CONTROLE DE ÁUDIO -->
+            <div class="music-player">
+                🎵 Trilha Sonora:
+                <select id="select-musica" onchange="trocarMusicaSimulada()">
+                    <option value="Haggstrom">Haggstrom</option>
+                    <option value="Living Mice">Living Mice</option>
+                    <option value="Sedex">Sedex</option>
+                    <option value="Wet Hands">Wet Hands</option>
+                    <option value="Subwoofer Lullaby">Subwoofer Lullaby</option>
+                    <option value="Mogi Coty 2">Mogi Coty 2</option>
+                </select>
+                <span id="status-musica">▶️ Tocando</span>
+            </div>
+        </div>
+
+        <!-- MENU PRINCIPAL DE MODOS -->
+        <div id="menu-principal" class="oculto">
+            <div id="banner-aep-bloco" class="painel-aep oculto">
+                <h3>🏆 Área de Alunos Exemplares (AEP) Ativada!</h3>
+                <p>Você atingiu nota e nível altos. Compita agora no topo da liderança mundial.</p>
+                <button class="btn-modo" style="background:#2c3e50;" onclick="abrirModo('oaep')">🏅 Ingressar na OAEP</button>
+            </div>
+
+            <h2 style="text-align: center;">Menu de Operações</h2>
+            <div class="menu-modos">
+                <button class="btn-modo" onclick="abrirModo('tutorial')">📖 Tutorial</button>
+                <button class="btn-modo" onclick="abrirModo('tabuada')">✖️ Tabuada e Frações</button>
+                <button class="btn-modo" onclick="abrirModo('exercicios')">🏋️ Exercícios (Ganhar Vidas)</button>
+                <button class="btn-modo" onclick="abrirModo('caixas')">💰 Somar os Caixas</button>
+                <button class="btn-modo" onclick="abrirModo('achar_erro')">🔍 Achar Erro no Caixa</button>
+                <button class="btn-modo" onclick="abrirModo('desafio')">🏆 Desafio de Avanço</button>
+                <button class="btn-modo" onclick="abrirModo('online')" style="background:#e74c3c;">⚡ Modo Online 1v1</button>
+                <button class="btn-modo" onclick="abrirModo('prova')" style="background:#9b59b6;">📝 Fazer Prova Periódica</button>
+                <button class="btn-modo" onclick="abrirModo('olt')" style="background:#27ae60;">🏟️ Olimpíada OLT</button>
+                <button class="btn-modo" onclick="abrirRanking()" style="background:#34495e;">📊 Lideranças / Rankings</button>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn-acao" onclick="desafioDiario()" style="background:#e67e22; flex:1;">📅 Menu de Desafios Diários (5 Restantes)</button>
+                <button class="btn-acao" onclick="manterOfensiva()" style="background:#1abc9c; flex:1;">🔥 Treinar Ofensiva Diária</button>
+            </div>
+        </div>
+
+        <!-- ÁREA CORE DOS JOGOS (PAINEL ESQUERDA/DIREITA) -->
+        <div id="tela-jogo" class="oculto">
+            <button class="btn-voltar" onclick="voltarAoMenu()">⬅️ Abandonar Operação</button>
+            <div class="painel-jogo">
+                <div class="col-esquerda" id="jogo-explicacao"></div>
+                <div class="col-white col-direita">
+                    <div id="jogo-problema"></div>
+                    <button id="btn-pedir-dica" class="btn-dica" onclick="comprarDica()">💡 Comprar Dica (🪙 30 LENES)</button>
+                    <div id="bloco-dica-texto" class="bloco-dica oculto"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABELAS DE LIDERANÇA TRIPLA -->
+        <div id="tela-ranking" class="oculto">
+            <button class="btn-voltar" onclick="voltarAoMenu()">⬅️ Voltar ao Menu</button>
+            <h2>📊 Quadros de Classificação Global</h2>
+            <div class="abas-ranking">
+                <button class="btn-aba ativa" id="aba-r1" onclick="mudarAbaRanking(1)">1. Ofensivas</button>
+                <button class="btn-aba" id="aba-r2" onclick="mudarAbaRanking(2)">2. Notas de Prova</button>
+                <button class="btn-aba" id="aba-r3" onclick="mudarAbaRanking(3)">3. Níveis de Jogo</button>
+            </div>
+            <div class="ranking-lista" id="ranking-container"></div>
+        </div>
+
+    </div>
+
+    <!-- Vincula o arquivo de lógica JavaScript separado -->
+    <script src="script.js"></script>
+</body>
+</html>
